@@ -30,7 +30,7 @@ flowchart LR
     C --> E["sql/business_questions.sql<br/>run by src/run_sql.py"]
     E --> F["reports/sql_results.md"]
     D --> G["app.py<br/>Streamlit dashboard"]
-    D --> H["Power BI report<br/>(docs/POWER_BI_GUIDE.md)"]
+    D --> H["Power BI project<br/>powerbi/RetailOperations.pbip"]
     T["tests/ (pytest)<br/>+ GitHub Actions"] -. checks .-> B
     T -. checks .-> E
     T -. checks .-> G
@@ -113,6 +113,7 @@ retail-operations-intelligence/
 │   ├── raw/                      generated raw CSVs (dirty on purpose)
 │   ├── processed/                clean star-schema CSVs for Power BI / Streamlit
 │   └── warehouse.db              SQLite warehouse (~0.6 MB)
+├── powerbi/                      Power BI Project (.pbip): TMDL model + PBIR report, build/validation scripts
 ├── reports/                      data_quality_report.md, sql_results.md
 ├── tests/                        pytest suite (26 tests)
 ├── docs/                         POWER_BI_GUIDE.md, INTERVIEW_GUIDE.md
@@ -211,7 +212,13 @@ The Oct–Dec rise is **built into the generator** (festive-season weights), so 
 
 ## 10. Power BI
 
-Step-by-step guide: [`docs/POWER_BI_GUIDE.md`](docs/POWER_BI_GUIDE.md) — import `data/processed/*.csv`, build the star schema relationships, DAX date table, 12 DAX measures and a reconciliation checklist against the SQL results. (The `.pbix` file is not included; the guide shows how to build it.)
+A ready-to-open **Power BI Project (PBIP)** is in [`powerbi/`](powerbi/). It has a TMDL semantic model and a 4-page PBIR report: Executive Overview, Product Profitability, Inventory Alerts and Data Quality.
+
+![Power BI Executive Overview, a real screenshot from Power BI Desktop 2.158 (synthetic data)](assets/powerbi_overview.png)
+
+- **Model:** star schema with DimDate (marked as the date table), DimProduct, DimRegion, FactSales, FactInventory and Returns. Relationships are single-direction many-to-one, key columns are hidden, and 25 documented DAX measures live in `_Measures` (time intelligence uses `DATEADD`/`TOTALYTD`; share measures use `REMOVEFILTERS`). The CSVs load through Power Query with explicit column types and a `DataFolder` parameter.
+- **Validated in Power BI Desktop 2.158 (Sept 2026):** the project opens without errors and a full refresh loads every table (FactSales 5,948 rows). Its measures were run as DAX queries against the open model and compared with SQL on `warehouse.db`: **126 of 126 checks match**, for example revenue ₹37,607,486.05, gross profit ₹12,959,219.05, margin 34.46%, Online share 45.39% and Home margin 38.34%. Details are in [`powerbi/VALIDATION.md`](powerbi/VALIDATION.md). Other pages: [products](assets/powerbi_products.png), [inventory](assets/powerbi_inventory.png), [data quality](assets/powerbi_data_quality.png).
+- **To use it:** open `powerbi/RetailOperations.pbip`, set the `DataFolder` parameter to your clone's `data\processed` path (Transform data → Edit parameters), then click **Refresh**. No `.pbix` is committed; **File → Save as → .pbix** creates one. Full steps, plus a build-it-yourself walkthrough, are in [`docs/POWER_BI_GUIDE.md`](docs/POWER_BI_GUIDE.md).
 
 ## 11. Deploy (Streamlit Community Cloud)
 
