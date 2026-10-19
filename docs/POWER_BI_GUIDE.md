@@ -25,7 +25,7 @@ powerbi/
 
 **A1. Open.** Double-click `powerbi/RetailOperations.pbip`, or in Desktop use **File → Open → Browse → Power BI project files (*.pbip)**.
 
-**A2. Point the model at your clone (`DataFolder`).** The CSVs are read through a text parameter called `DataFolder`. Its committed value is a placeholder (`C:\path	oetail-operations-intelligence\data\processed`), so after cloning you must change it:
+**A2. Point the model at your clone (`DataFolder`).** The CSVs are read through a text parameter called `DataFolder`. Its committed value is a placeholder (`C:\path\to\retail-operations-intelligence\data\processed`), so after cloning you must change it:
 1. **Home → Transform data ▾ → Edit parameters**.
 2. Set **DataFolder** to the full path of *your* `data\processed` folder, **without a trailing backslash**, for example `D:\repos\retail-operations-intelligence\data\processed`.
 3. Click **OK**, then **Apply changes**.
