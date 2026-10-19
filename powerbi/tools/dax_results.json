@@ -1,0 +1,260 @@
+﻿{
+    "connection":  "Data Source=localhost:51388",
+    "tables":  {
+                   "DimRegion":  {
+                                     "state":  "Ready",
+                                     "refreshed":  "10/19/2026 11:54:33"
+                                 },
+                   "DimProduct":  {
+                                      "state":  "Ready",
+                                      "refreshed":  "10/19/2026 11:54:33"
+                                  },
+                   "_Measures":  {
+                                     "state":  "Ready",
+                                     "refreshed":  "10/19/2026 11:54:32"
+                                 },
+                   "FactInventory":  {
+                                         "state":  "Ready",
+                                         "refreshed":  "10/19/2026 11:54:33"
+                                     },
+                   "FactSales":  {
+                                     "state":  "Ready",
+                                     "refreshed":  "10/19/2026 11:54:33"
+                                 },
+                   "Returns":  {
+                                   "state":  "Ready",
+                                   "refreshed":  "10/19/2026 11:54:33"
+                               },
+                   "DimDate":  {
+                                   "state":  "Ready",
+                                   "refreshed":  "10/19/2026 11:54:33"
+                               }
+               },
+    "measure_errors":  {
+
+                       },
+    "totals":  [
+                   {
+                       "Total Revenue":  37607486.05,
+                       "Total Cost":  24648267,
+                       "Gross Profit":  12959219.05,
+                       "Gross Margin %":  0.34459147396266865,
+                       "Orders":  5948,
+                       "Units Sold":  17781,
+                       "Avg Order Value":  6322.7112,
+                       "Revenue Share %":  1,
+                       "Inventory Value":  7027455,
+                       "On Hand Units":  5268,
+                       "Reorder Alerts":  15,
+                       "Overstock Alerts":  28,
+                       "Healthy Items":  37,
+                       "Units To Reorder":  1120,
+                       "Excess Units":  546,
+                       "Alert On Hand Units":  3191,
+                       "Alert Inventory Value":  4175168,
+                       "Returns Units":  87,
+                       "Returned Lines":  40,
+                       "Returns Value":  204334.65,
+                       "Fact rows":  5948,
+                       "Inventory rows":  80,
+                       "Date rows":  365
+                   }
+               ],
+    "by_month":  [
+                     {
+                         "Year Month":  "2025-01",
+                         "Total Revenue":  2630075.25,
+                         "Revenue PM":  null,
+                         "MoM Growth %":  null,
+                         "Revenue YTD":  2630075.25
+                     },
+                     {
+                         "Year Month":  "2025-02",
+                         "Total Revenue":  2095186.25,
+                         "Revenue PM":  2630075.25,
+                         "MoM Growth %":  -0.20337402893700474,
+                         "Revenue YTD":  4725261.5
+                     },
+                     {
+                         "Year Month":  "2025-03",
+                         "Total Revenue":  2738424.8,
+                         "Revenue PM":  2095186.25,
+                         "MoM Growth %":  0.30700781374448216,
+                         "Revenue YTD":  7463686.3
+                     },
+                     {
+                         "Year Month":  "2025-04",
+                         "Total Revenue":  2820844.65,
+                         "Revenue PM":  2738424.8,
+                         "MoM Growth %":  0.030097540016435727,
+                         "Revenue YTD":  10284530.95
+                     },
+                     {
+                         "Year Month":  "2025-05",
+                         "Total Revenue":  2728847.95,
+                         "Revenue PM":  2820844.65,
+                         "MoM Growth %":  -0.03261317492262468,
+                         "Revenue YTD":  13013378.9
+                     },
+                     {
+                         "Year Month":  "2025-06",
+                         "Total Revenue":  2772608.85,
+                         "Revenue PM":  2728847.95,
+                         "MoM Growth %":  0.016036401002115196,
+                         "Revenue YTD":  15785987.75
+                     },
+                     {
+                         "Year Month":  "2025-07",
+                         "Total Revenue":  2750605.65,
+                         "Revenue PM":  2772608.85,
+                         "MoM Growth %":  -0.0079359192696798909,
+                         "Revenue YTD":  18536593.4
+                     },
+                     {
+                         "Year Month":  "2025-08",
+                         "Total Revenue":  3184227.25,
+                         "Revenue PM":  2750605.65,
+                         "MoM Growth %":  0.15764586246668982,
+                         "Revenue YTD":  21720820.65
+                     },
+                     {
+                         "Year Month":  "2025-09",
+                         "Total Revenue":  3344105.65,
+                         "Revenue PM":  3184227.25,
+                         "MoM Growth %":  0.050209481751027664,
+                         "Revenue YTD":  25064926.3
+                     },
+                     {
+                         "Year Month":  "2025-10",
+                         "Total Revenue":  3993500.6,
+                         "Revenue PM":  3344105.65,
+                         "MoM Growth %":  0.19419091917744882,
+                         "Revenue YTD":  29058426.9
+                     },
+                     {
+                         "Year Month":  "2025-11",
+                         "Total Revenue":  4168230.05,
+                         "Revenue PM":  3993500.6,
+                         "MoM Growth %":  0.043753455301847204,
+                         "Revenue YTD":  33226656.95
+                     },
+                     {
+                         "Year Month":  "2025-12",
+                         "Total Revenue":  4380829.1,
+                         "Revenue PM":  4168230.05,
+                         "MoM Growth %":  0.051004634449099084,
+                         "Revenue YTD":  37607486.05
+                     }
+                 ],
+    "by_category":  [
+                        {
+                            "Category":  "Electronics",
+                            "Total Revenue":  9006702.65,
+                            "Gross Profit":  3100673.65,
+                            "Gross Margin %":  0.34426290846850593
+                        },
+                        {
+                            "Category":  "Home",
+                            "Total Revenue":  8868535.6,
+                            "Gross Profit":  3399797.6,
+                            "Gross Margin %":  0.38335501522934634
+                        },
+                        {
+                            "Category":  "Office",
+                            "Total Revenue":  9844861.9,
+                            "Gross Profit":  3274328.9,
+                            "Gross Margin %":  0.33259266948173238
+                        },
+                        {
+                            "Category":  "Lifestyle",
+                            "Total Revenue":  9887385.9,
+                            "Gross Profit":  3184418.9,
+                            "Gross Margin %":  0.32206883924698437
+                        }
+                    ],
+    "by_channel":  [
+                       {
+                           "Channel":  "Retail Store",
+                           "Orders":  2100,
+                           "Total Revenue":  13506075.2,
+                           "Revenue Share %":  0.35913262540451041,
+                           "Avg Order Value":  6431.4644
+                       },
+                       {
+                           "Channel":  "Marketplace",
+                           "Orders":  1117,
+                           "Total Revenue":  7029688.6,
+                           "Revenue Share %":  0.18692258745117582,
+                           "Avg Order Value":  6293.3649
+                       },
+                       {
+                           "Channel":  "Online",
+                           "Orders":  2731,
+                           "Total Revenue":  17071722.25,
+                           "Revenue Share %":  0.4539447871443138,
+                           "Avg Order Value":  6251.0883
+                       }
+                   ],
+    "by_region":  [
+                      {
+                          "Region":  "West",
+                          "Orders":  1901,
+                          "Total Revenue":  11854111.1,
+                          "Gross Profit":  4090305.1,
+                          "Gross Margin %":  0.34505371727113304,
+                          "Revenue Share %":  0.31520615561060616
+                      },
+                      {
+                          "Region":  "South",
+                          "Orders":  1431,
+                          "Total Revenue":  8980680.05,
+                          "Gross Profit":  3112659.05,
+                          "Gross Margin %":  0.34659502762265759,
+                          "Revenue Share %":  0.2388003292232824
+                      },
+                      {
+                          "Region":  "East",
+                          "Orders":  1097,
+                          "Total Revenue":  6845100.4,
+                          "Gross Profit":  2346011.4,
+                          "Gross Margin %":  0.34272855954019316,
+                          "Revenue Share %":  0.18201430403774624
+                      },
+                      {
+                          "Region":  "North",
+                          "Orders":  1504,
+                          "Total Revenue":  9829235.95,
+                          "Gross Profit":  3377646.95,
+                          "Gross Margin %":  0.34363270626339987,
+                          "Revenue Share %":  0.26136381296350969
+                      },
+                      {
+                          "Region":  "Unknown",
+                          "Orders":  15,
+                          "Total Revenue":  98358.55,
+                          "Gross Profit":  32596.55,
+                          "Gross Margin %":  0.33140535316960246,
+                          "Revenue Share %":  0.0026153981648555317
+                      }
+                  ],
+    "by_status":  [
+                      {
+                          "Stock Status":  "Healthy",
+                          "Rows":  37,
+                          "On Hand Units":  2077,
+                          "Inventory Value":  2852287
+                      },
+                      {
+                          "Stock Status":  "Reorder",
+                          "Rows":  15,
+                          "On Hand Units":  191,
+                          "Inventory Value":  286574
+                      },
+                      {
+                          "Stock Status":  "Overstock",
+                          "Rows":  28,
+                          "On Hand Units":  3000,
+                          "Inventory Value":  3888594
+                      }
+                  ]
+}
