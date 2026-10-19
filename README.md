@@ -4,6 +4,8 @@ An end-to-end, beginner-friendly analytics project: **raw CSV → data-quality v
 
 ![tests](https://github.com/Redskull2525/retail-operations-intelligence/actions/workflows/tests.yml/badge.svg)
 
+**Live demo:** <https://retail-operations-intelligence-abhishek.streamlit.app> (Streamlit Community Cloud; the first load after a quiet period takes about a minute while the app wakes up).
+
 > **Data honesty note:** every number in this repository comes from **synthetic (fake) data** created by `src/generate_data.py` with a fixed random seed (42). There is no real company, client, revenue or cost saving behind it. The data-quality problems in the raw file were **injected on purpose** so the cleaning step has something real to do.
 
 ![Streamlit dashboard screenshot (synthetic data)](assets/dashboard.png)
@@ -228,7 +230,7 @@ A ready-to-open **Power BI Project (PBIP)** is in [`powerbi/`](powerbi/). It has
 4. (Advanced settings) choose Python 3.13 if offered, then **Deploy**. Dependencies install from `requirements.txt`.
 5. Paste the URL you get into this README only after it is working.
 
-No live URL is claimed here.
+This repository is deployed at <https://retail-operations-intelligence-abhishek.streamlit.app> (deployed 19 Oct 2026 from `main`, `app.py`, Python 3.13; every tab was opened and checked after deployment).
 
 ## 12. Limitations
 
