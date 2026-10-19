@@ -1,0 +1,148 @@
+/// Home table for all report measures.
+table _Measures
+
+	/// Completed-sale revenue: sum of quantity x unit price x (1 - discount). Returns are excluded.
+	measure 'Total Revenue' = SUM ( FactSales[Revenue] )
+		formatString: ₹#,0
+		displayFolder: Sales
+
+	/// Cost of goods sold: quantity x catalogue unit cost.
+	measure 'Total Cost' = SUM ( FactSales[Cost] )
+		formatString: ₹#,0
+		displayFolder: Sales
+
+	/// Revenue minus cost of goods sold (not net profit).
+	measure 'Gross Profit' = [Total Revenue] - [Total Cost]
+		formatString: ₹#,0
+		displayFolder: Sales
+
+	/// Gross profit as a share of revenue; BLANK when there is no revenue.
+	measure 'Gross Margin %' = DIVIDE ( [Gross Profit], [Total Revenue] )
+		formatString: 0.0%
+		displayFolder: Sales
+
+	/// Number of distinct order IDs.
+	measure Orders = DISTINCTCOUNT ( FactSales[Order ID] )
+		formatString: #,0
+		displayFolder: Sales
+
+	/// Units sold on completed orders.
+	measure 'Units Sold' = SUM ( FactSales[Quantity] )
+		formatString: #,0
+		displayFolder: Sales
+
+	/// Average order value (AOV) = revenue / orders. One product per order in this dataset.
+	measure 'Avg Order Value' = DIVIDE ( [Total Revenue], [Orders] )
+		formatString: ₹#,0.00
+		displayFolder: Sales
+
+	/// Revenue for the previous month, using DATEADD on the marked DimDate table.
+	measure 'Revenue PM' = CALCULATE ( [Total Revenue], DATEADD ( DimDate[Date], -1, MONTH ) )
+		formatString: ₹#,0
+		displayFolder: Time intelligence
+
+	/// Month-over-month revenue growth; BLANK for January 2025 because there is no December 2024.
+	measure 'MoM Growth %' =
+			VAR PrevMonthRevenue = [Revenue PM]
+			RETURN
+			    IF ( NOT ISBLANK ( PrevMonthRevenue ), DIVIDE ( [Total Revenue] - PrevMonthRevenue, PrevMonthRevenue ) )
+		formatString: 0.0%
+		displayFolder: Time intelligence
+
+	/// Year-to-date running revenue (matches SQL Q8).
+	measure 'Revenue YTD' = TOTALYTD ( [Total Revenue], DimDate[Date] )
+		formatString: ₹#,0
+		displayFolder: Time intelligence
+
+	/// Share of revenue across all channels and regions (other filters such as date and product are kept).
+	measure 'Revenue Share %' = DIVIDE ( [Total Revenue], CALCULATE ( [Total Revenue], REMOVEFILTERS ( FactSales[Channel] ), REMOVEFILTERS ( DimRegion ) ) )
+		formatString: 0.0%
+		displayFolder: Sales
+
+	/// Stock value at cost on the 2025-12-31 snapshot.
+	measure 'Inventory Value' = SUM ( FactInventory[Inventory Value] )
+		formatString: ₹#,0
+		displayFolder: Inventory
+
+	/// Units on hand on the snapshot date.
+	measure 'On Hand Units' = SUM ( FactInventory[On Hand Units] )
+		formatString: #,0
+		displayFolder: Inventory
+
+	/// Product-region rows at or below their reorder point.
+	measure 'Reorder Alerts' = COALESCE ( CALCULATE ( COUNTROWS ( FactInventory ), KEEPFILTERS ( FactInventory[Stock Status] = "Reorder" ) ), 0 )
+		formatString: #,0
+		displayFolder: Inventory
+
+	/// Product-region rows holding more than their target stock.
+	measure 'Overstock Alerts' = COALESCE ( CALCULATE ( COUNTROWS ( FactInventory ), KEEPFILTERS ( FactInventory[Stock Status] = "Overstock" ) ), 0 )
+		formatString: #,0
+		displayFolder: Inventory
+
+	/// Product-region rows between reorder point and target stock.
+	measure 'Healthy Items' = COALESCE ( CALCULATE ( COUNTROWS ( FactInventory ), KEEPFILTERS ( FactInventory[Stock Status] = "Healthy" ) ), 0 )
+		formatString: #,0
+		displayFolder: Inventory
+
+	/// Units needed to bring Reorder rows back to target stock.
+	measure 'Units To Reorder' = SUMX ( FILTER ( FactInventory, FactInventory[Stock Status] = "Reorder" ), RELATED ( DimProduct[Target Stock] ) - FactInventory[On Hand Units] )
+		formatString: #,0
+		displayFolder: Inventory
+
+	/// Units above target stock on Overstock rows.
+	measure 'Excess Units' = SUMX ( FILTER ( FactInventory, FactInventory[Stock Status] = "Overstock" ), FactInventory[On Hand Units] - RELATED ( DimProduct[Target Stock] ) )
+		formatString: #,0
+		displayFolder: Inventory
+
+	/// On-hand units for Reorder and Overstock rows only (drives the alert table).
+	measure 'Alert On Hand Units' = CALCULATE ( [On Hand Units], KEEPFILTERS ( FactInventory[Stock Status] IN { "Reorder", "Overstock" } ) )
+		formatString: #,0
+		displayFolder: Inventory
+
+	/// Inventory value at cost for Reorder and Overstock rows only.
+	measure 'Alert Inventory Value' = CALCULATE ( [Inventory Value], KEEPFILTERS ( FactInventory[Stock Status] IN { "Reorder", "Overstock" } ) )
+		formatString: ₹#,0
+		displayFolder: Inventory
+
+	/// Units returned (positive number); excluded from revenue KPIs.
+	measure 'Returns Units' = -SUM ( Returns[Quantity] )
+		formatString: #,0
+		displayFolder: Returns
+
+	/// Number of return lines kept aside by the pipeline.
+	measure 'Returned Lines' = COUNTROWS ( Returns )
+		formatString: #,0
+		displayFolder: Returns
+
+	/// Value of returned units at the original discounted price.
+	measure 'Returns Value' = SUM ( Returns[Return Value] )
+		formatString: ₹#,0
+		displayFolder: Returns
+
+	/// Font colour for margin cells: green >= 38%, red < 32%, amber otherwise.
+	measure 'Margin Color' =
+			VAR Margin = [Gross Margin %]
+			RETURN
+			    SWITCH ( TRUE (), ISBLANK ( Margin ), BLANK (), Margin >= 0.38, "#1B7F5B", Margin < 0.32, "#C0392B", "#B9770E" )
+		isHidden
+		displayFolder: Formatting
+
+	/// Font colour for the stock status column.
+	measure 'Stock Status Color' = SWITCH ( SELECTEDVALUE ( FactInventory[Stock Status] ), "Reorder", "#C0392B", "Overstock", "#B9770E", "Healthy", "#1B7F5B" )
+		isHidden
+		displayFolder: Formatting
+
+	column 'Measure Placeholder'
+		dataType: string
+		isHidden
+		summarizeBy: none
+		sourceColumn: Measure Placeholder
+
+	partition _Measures-partition = m
+		mode: import
+		source =
+				let
+				    Source = #table(type table [#"Measure Placeholder" = text], {})
+				in
+				    Source
+

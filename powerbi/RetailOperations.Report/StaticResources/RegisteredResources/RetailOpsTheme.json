@@ -1,0 +1,36 @@
+{
+  "name": "RetailOpsTheme",
+  "dataColors": [
+    "#2A9D8F",
+    "#1F3A5F",
+    "#E9A23B",
+    "#E76F51",
+    "#6C7A89",
+    "#7B6FA6",
+    "#8AB17D",
+    "#B56576"
+  ],
+  "foreground": "#1F2933",
+  "background": "#FFFFFF",
+  "tableAccent": "#1F3A5F",
+  "good": "#1B7F5B",
+  "neutral": "#B9770E",
+  "bad": "#C0392B",
+  "textClasses": {
+    "callout": {
+      "fontSize": 22,
+      "fontFace": "Segoe UI Semibold",
+      "color": "#1F3A5F"
+    },
+    "title": {
+      "fontSize": 12,
+      "fontFace": "Segoe UI Semibold",
+      "color": "#1F3A5F"
+    },
+    "label": {
+      "fontSize": 10,
+      "fontFace": "Segoe UI",
+      "color": "#3E4C59"
+    }
+  }
+}

@@ -1,0 +1,60 @@
+/// One row per product per region on the 2025-12-31 snapshot (80 rows). Inventory value is at cost.
+table FactInventory
+
+	column 'Snapshot Date Key'
+		dataType: int64
+		isHidden
+		summarizeBy: none
+		sourceColumn: Snapshot Date Key
+
+	column 'Product ID'
+		dataType: string
+		isHidden
+		summarizeBy: none
+		sourceColumn: Product ID
+
+	column 'Region Key'
+		dataType: int64
+		isHidden
+		summarizeBy: none
+		sourceColumn: Region Key
+
+	column 'On Hand Units'
+		dataType: int64
+		isHidden
+		formatString: #,0
+		summarizeBy: none
+		sourceColumn: On Hand Units
+
+	column 'Inventory Value'
+		dataType: decimal
+		isHidden
+		formatString: ₹#,0
+		summarizeBy: none
+		sourceColumn: Inventory Value
+
+	/// Reorder if on hand <= reorder point; Overstock if on hand > target stock; else Healthy.
+	column 'Stock Status'
+		dataType: string
+		summarizeBy: none
+		sourceColumn: Stock Status
+
+	column 'Snapshot Date'
+		dataType: dateTime
+		isHidden
+		formatString: yyyy-mm-dd
+		summarizeBy: none
+		sourceColumn: Snapshot Date
+
+	partition FactInventory-partition = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "\fact_inventory.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Typed = Table.TransformColumnTypes(Promoted, {{"snapshot_date_key", Int64.Type}, {"product_id", type text}, {"region_key", Int64.Type}, {"on_hand_units", Int64.Type}, {"inventory_value", Currency.Type}, {"stock_status", type text}}, "en-US"),
+				    Renamed = Table.RenameColumns(Typed, {{"snapshot_date_key", "Snapshot Date Key"}, {"product_id", "Product ID"}, {"region_key", "Region Key"}, {"on_hand_units", "On Hand Units"}, {"inventory_value", "Inventory Value"}, {"stock_status", "Stock Status"}}),
+				    AddSnapshotDate = Table.AddColumn(Renamed, "Snapshot Date", each #date(Number.IntegerDivide([Snapshot Date Key], 10000), Number.Mod(Number.IntegerDivide([Snapshot Date Key], 100), 100), Number.Mod([Snapshot Date Key], 100)), type date)
+				in
+				    AddSnapshotDate
+

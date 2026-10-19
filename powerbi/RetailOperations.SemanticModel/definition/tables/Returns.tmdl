@@ -1,0 +1,78 @@
+/// Return lines (negative quantity) that the pipeline kept out of FactSales: 40 rows, 87 units.
+table Returns
+
+	column 'Order ID'
+		dataType: string
+		summarizeBy: none
+		sourceColumn: Order ID
+
+	column 'Return Date'
+		dataType: dateTime
+		isHidden
+		formatString: yyyy-mm-dd
+		summarizeBy: none
+		sourceColumn: Return Date
+
+	column 'Region Name'
+		dataType: string
+		isHidden
+		summarizeBy: none
+		sourceColumn: Region Name
+
+	column Channel
+		dataType: string
+		summarizeBy: none
+		sourceColumn: Channel
+
+	column 'Product ID'
+		dataType: string
+		isHidden
+		summarizeBy: none
+		sourceColumn: Product ID
+
+	column Quantity
+		dataType: int64
+		isHidden
+		formatString: #,0
+		summarizeBy: none
+		sourceColumn: Quantity
+
+	column 'Unit Price'
+		dataType: decimal
+		isHidden
+		formatString: ₹#,0
+		summarizeBy: none
+		sourceColumn: Unit Price
+
+	column 'Discount %'
+		dataType: double
+		isHidden
+		formatString: 0%
+		summarizeBy: none
+		sourceColumn: Discount %
+
+	column 'Return Value'
+		dataType: decimal
+		isHidden
+		formatString: ₹#,0.00
+		summarizeBy: none
+		sourceColumn: Return Value
+
+	/// Region key looked up from the region name, so Returns can share the DimRegion slicer.
+	column 'Region Key' = LOOKUPVALUE ( DimRegion[Region Key], DimRegion[Region], Returns[Region Name] )
+		dataType: int64
+		isHidden
+		summarizeBy: none
+
+	partition Returns-partition = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "\returns_excluded.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Typed = Table.TransformColumnTypes(Promoted, {{"order_id", type text}, {"order_date", type date}, {"region", type text}, {"channel", type text}, {"product_id", type text}, {"quantity", Int64.Type}, {"unit_price", Currency.Type}, {"discount_pct", type number}}, "en-US"),
+				    Renamed = Table.RenameColumns(Typed, {{"order_id", "Order ID"}, {"order_date", "Return Date"}, {"region", "Region Name"}, {"channel", "Channel"}, {"product_id", "Product ID"}, {"quantity", "Quantity"}, {"unit_price", "Unit Price"}, {"discount_pct", "Discount %"}}),
+				    AddReturnValue = Table.AddColumn(Renamed, "Return Value", each -[Quantity] * [Unit Price] * (1 - [#"Discount %"]), Currency.Type)
+				in
+				    AddReturnValue
+

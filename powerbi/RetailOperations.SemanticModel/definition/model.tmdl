@@ -1,0 +1,16 @@
+/// Retail Operations Intelligence - SYNTHETIC data (seed 42) for portfolio demonstration.
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	discourageImplicitMeasures
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+ref table DimDate
+ref table DimProduct
+ref table DimRegion
+ref table FactSales
+ref table FactInventory
+ref table Returns
+ref table _Measures
+

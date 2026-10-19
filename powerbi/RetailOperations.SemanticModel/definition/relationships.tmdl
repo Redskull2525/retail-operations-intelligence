@@ -1,0 +1,36 @@
+relationship FactSales_OrderDate_DimDate
+	fromColumn: FactSales.'Order Date'
+	toColumn: DimDate.Date
+
+relationship FactSales_ProductID_DimProduct
+	fromColumn: FactSales.'Product ID'
+	toColumn: DimProduct.'Product ID'
+
+relationship FactSales_RegionKey_DimRegion
+	fromColumn: FactSales.'Region Key'
+	toColumn: DimRegion.'Region Key'
+
+relationship FactInventory_SnapshotDate_DimDate
+	fromColumn: FactInventory.'Snapshot Date'
+	toColumn: DimDate.Date
+
+relationship FactInventory_ProductID_DimProduct
+	fromColumn: FactInventory.'Product ID'
+	toColumn: DimProduct.'Product ID'
+
+relationship FactInventory_RegionKey_DimRegion
+	fromColumn: FactInventory.'Region Key'
+	toColumn: DimRegion.'Region Key'
+
+relationship Returns_ReturnDate_DimDate
+	fromColumn: Returns.'Return Date'
+	toColumn: DimDate.Date
+
+relationship Returns_ProductID_DimProduct
+	fromColumn: Returns.'Product ID'
+	toColumn: DimProduct.'Product ID'
+
+relationship Returns_RegionKey_DimRegion
+	fromColumn: Returns.'Region Key'
+	toColumn: DimRegion.'Region Key'
+

@@ -1,0 +1,56 @@
+/// One row per product (20 products, 4 categories).
+table DimProduct
+
+	column 'Product ID'
+		dataType: string
+		isHidden
+		summarizeBy: none
+		sourceColumn: Product ID
+
+	column Product
+		dataType: string
+		summarizeBy: none
+		sourceColumn: Product
+
+	column Category
+		dataType: string
+		summarizeBy: none
+		sourceColumn: Category
+
+	column 'Unit Cost'
+		dataType: decimal
+		formatString: ₹#,0
+		summarizeBy: none
+		sourceColumn: Unit Cost
+
+	column 'List Price'
+		dataType: decimal
+		formatString: ₹#,0
+		summarizeBy: none
+		sourceColumn: List Price
+
+	/// Reorder when on-hand units fall to this level.
+	column 'Reorder Point'
+		dataType: int64
+		formatString: #,0
+		summarizeBy: none
+		sourceColumn: Reorder Point
+
+	/// Ideal stock level; above it the row is Overstock.
+	column 'Target Stock'
+		dataType: int64
+		formatString: #,0
+		summarizeBy: none
+		sourceColumn: Target Stock
+
+	partition DimProduct-partition = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "\dim_product.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Typed = Table.TransformColumnTypes(Promoted, {{"product_id", type text}, {"product_name", type text}, {"category", type text}, {"unit_cost", Currency.Type}, {"unit_price", Currency.Type}, {"reorder_point", Int64.Type}, {"target_stock", Int64.Type}}, "en-US"),
+				    Renamed = Table.RenameColumns(Typed, {{"product_id", "Product ID"}, {"product_name", "Product"}, {"category", "Category"}, {"unit_cost", "Unit Cost"}, {"unit_price", "List Price"}, {"reorder_point", "Reorder Point"}, {"target_stock", "Target Stock"}})
+				in
+				    Renamed
+

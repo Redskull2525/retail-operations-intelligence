@@ -1,0 +1,91 @@
+/// One row per completed order line (5,948 rows). Returns are excluded (see Returns).
+table FactSales
+
+	column 'Order ID'
+		dataType: string
+		summarizeBy: none
+		sourceColumn: Order ID
+
+	column 'Date Key'
+		dataType: int64
+		isHidden
+		summarizeBy: none
+		sourceColumn: Date Key
+
+	column 'Order Date'
+		dataType: dateTime
+		isHidden
+		formatString: yyyy-mm-dd
+		summarizeBy: none
+		sourceColumn: Order Date
+
+	column 'Product ID'
+		dataType: string
+		isHidden
+		summarizeBy: none
+		sourceColumn: Product ID
+
+	column 'Region Key'
+		dataType: int64
+		isHidden
+		summarizeBy: none
+		sourceColumn: Region Key
+
+	column Channel
+		dataType: string
+		summarizeBy: none
+		sourceColumn: Channel
+
+	column Quantity
+		dataType: int64
+		isHidden
+		formatString: #,0
+		summarizeBy: none
+		sourceColumn: Quantity
+
+	column 'Unit Price'
+		dataType: decimal
+		isHidden
+		formatString: ₹#,0
+		summarizeBy: none
+		sourceColumn: Unit Price
+
+	column 'Discount %'
+		dataType: double
+		isHidden
+		formatString: 0%
+		summarizeBy: none
+		sourceColumn: Discount %
+
+	column Revenue
+		dataType: decimal
+		isHidden
+		formatString: ₹#,0.00
+		summarizeBy: none
+		sourceColumn: Revenue
+
+	column Cost
+		dataType: decimal
+		isHidden
+		formatString: ₹#,0.00
+		summarizeBy: none
+		sourceColumn: Cost
+
+	column 'Gross Profit'
+		dataType: decimal
+		isHidden
+		formatString: ₹#,0.00
+		summarizeBy: none
+		sourceColumn: Gross Profit
+
+	partition FactSales-partition = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "\fact_sales.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Typed = Table.TransformColumnTypes(Promoted, {{"order_id", type text}, {"date_key", Int64.Type}, {"order_date", type date}, {"product_id", type text}, {"region_key", Int64.Type}, {"channel", type text}, {"quantity", Int64.Type}, {"unit_price", Currency.Type}, {"discount_pct", type number}, {"revenue", Currency.Type}, {"cost", Currency.Type}, {"gross_profit", Currency.Type}}, "en-US"),
+				    Renamed = Table.RenameColumns(Typed, {{"order_id", "Order ID"}, {"date_key", "Date Key"}, {"order_date", "Order Date"}, {"product_id", "Product ID"}, {"region_key", "Region Key"}, {"channel", "Channel"}, {"quantity", "Quantity"}, {"unit_price", "Unit Price"}, {"discount_pct", "Discount %"}, {"revenue", "Revenue"}, {"cost", "Cost"}, {"gross_profit", "Gross Profit"}})
+				in
+				    Renamed
+

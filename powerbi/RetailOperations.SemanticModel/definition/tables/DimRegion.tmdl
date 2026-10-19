@@ -1,0 +1,25 @@
+/// Sales regions incl. 'Unknown' for sales whose region was missing in the raw file.
+table DimRegion
+
+	column 'Region Key'
+		dataType: int64
+		isHidden
+		summarizeBy: none
+		sourceColumn: Region Key
+
+	column Region
+		dataType: string
+		summarizeBy: none
+		sourceColumn: Region
+
+	partition DimRegion-partition = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "\dim_region.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Typed = Table.TransformColumnTypes(Promoted, {{"region_key", Int64.Type}, {"region_name", type text}}, "en-US"),
+				    Renamed = Table.RenameColumns(Typed, {{"region_key", "Region Key"}, {"region_name", "Region"}})
+				in
+				    Renamed
+
