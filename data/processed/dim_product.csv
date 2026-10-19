@@ -1,0 +1,21 @@
+product_id,product_name,category,unit_cost,unit_price,reorder_point,target_stock
+P001,Wireless Mouse,Electronics,332,502,29,80
+P002,USB-C Hub,Electronics,2163,3609,16,56
+P003,Bluetooth Speaker,Electronics,1373,2343,34,100
+P004,Webcam,Electronics,1990,2640,31,81
+P005,Keyboard,Electronics,1310,2366,20,104
+P006,Desk Lamp,Home,1652,2881,24,81
+P007,Storage Box,Home,1192,1887,17,112
+P008,Water Bottle,Home,271,473,18,94
+P009,Bedsheet Set,Home,513,750,29,54
+P010,Air Purifier,Home,2430,4340,27,104
+P011,Notebook Pack,Office,1928,2950,16,84
+P012,Office Chair,Office,224,301,29,97
+P013,Monitor Stand,Office,2315,4238,29,78
+P014,Pen Set,Office,895,1318,13,82
+P015,Paper Ream,Office,2013,2673,16,98
+P016,Backpack,Lifestyle,1252,1735,24,96
+P017,Travel Mug,Lifestyle,2357,4124,22,94
+P018,Yoga Mat,Lifestyle,1786,2567,29,108
+P019,Lunch Box,Lifestyle,1155,1712,30,112
+P020,Fitness Band,Lifestyle,806,1338,26,59
